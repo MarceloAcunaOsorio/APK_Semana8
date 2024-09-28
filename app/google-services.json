@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "939420715307",
+    "project_id": "apk-semana-8",
+    "storage_bucket": "apk-semana-8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:939420715307:android:465efc6c32755bbcb2dd6e",
+        "android_client_info": {
+          "package_name": "com.marceloacuna.myapksemana8"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLLkwbeN3RsbvZufMRR2Xb3yDVG8eRcIc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
