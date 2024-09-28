@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,6 +32,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -160,7 +162,8 @@ fun SpeechRecognitionApp() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(30.dp),
+            .paddingFromBaseline(top = 200.dp, bottom = 8.dp)
+            .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -168,12 +171,12 @@ fun SpeechRecognitionApp() {
             text = speechText,
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 16.dp)
+
         )
-        Button(
-            onClick = {
+        Button(onClick = {
                 // Verificar permiso
-                permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-            }
+                permissionLauncher.launch(Manifest.permission.RECORD_AUDIO) },
+            colors = androidx.compose.material.ButtonDefaults.buttonColors(backgroundColor = Color.Yellow)
         ) {
             Text(text = "Presionar y hablar")
         }
