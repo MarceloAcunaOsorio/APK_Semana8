@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -83,11 +84,11 @@ import com.marceloacuna.myapksemana8.Routes
 fun Home (modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
 
     val authState = authViewModel.authState.observeAsState()
-    var showMenu by remember{ mutableStateOf(false) }
+    var showMenu by remember { mutableStateOf(false) }
     var context = LocalContext.current
 
     LaunchedEffect(authState.value) {
-        when(authState.value){
+        when (authState.value) {
             is AuthState.Unauthenticated -> navController.navigate(Routes.Login)
             else -> Unit
         }
@@ -98,21 +99,23 @@ fun Home (modifier: Modifier = Modifier, navController: NavController, authViewM
         colors = TopAppBarDefaults.topAppBarColors(Color.Cyan),
         actions = {
 
-            IconButton(onClick = {Toast.makeText(context,"Home",Toast.LENGTH_SHORT).show()}) {
-                Icon(Icons.Default.Home,"")
+            IconButton(onClick = { Toast.makeText(context, "Home", Toast.LENGTH_SHORT).show() }) {
+                Icon(Icons.Default.Home, "")
             }
 
-            IconButton(onClick = {showMenu = !showMenu}) {
-                Icon(Icons.Default.Menu,"")
+            IconButton(onClick = { showMenu = !showMenu }) {
+                Icon(Icons.Default.Menu, "")
             }
 
             DropdownMenu(
                 expanded = showMenu,
-                onDismissRequest = {showMenu = false}
+                onDismissRequest = { showMenu = false }
             ) {
-               // DropdownMenuItem(text = { Text(text = "Crear Letra")}, onClick = {Toast.makeText(context,"Crear Letra",Toast.LENGTH_SHORT).show()})
+                // DropdownMenuItem(text = { Text(text = "Crear Letra")}, onClick = {Toast.makeText(context,"Crear Letra",Toast.LENGTH_SHORT).show()})
 
-                DropdownMenuItem(text = { Text(text = "Cerrar Sesión")}, onClick = {authViewModel.cerrarSesion()})
+                DropdownMenuItem(
+                    text = { Text(text = "Cerrar Sesión") },
+                    onClick = { authViewModel.cerrarSesion() })
             }
         }
     )
@@ -325,12 +328,21 @@ private fun obtenerlistadoletras(letra: String){
     letraRef.addListenerForSingleValueEvent(object: ValueEventListener{
         override fun onDataChange(snapshot: DataSnapshot) {
             if(snapshot.exists()) {
-               val letraListadoIndo = snapshot.getValue(:class.java)
+               val letraListadoIndo = snapshot.getValue(Letras_Model::class.java)
+
+                letraListadoIndo?.let { abecedario ->
+                    Log.d("listado de letras", "nombre: ${abecedario.nombre}, descripcion : ${abecedario.descripcion}, imagen: ${abecedario.imgen}")
+                }?: run{
+                    Log.d("listado de letras", "no existe letra")
+                }
+            }else
+            {
+                Log.d("listado de letras", "no existe letra")
             }
         }
 
         override fun onCancelled(error: DatabaseError) {
-            TODO("Not yet implemented")
+            Log.e("Error Data Letras", "Error al obtener datos: ${error.message}")
         }
     })
 }
