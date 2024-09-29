@@ -126,6 +126,8 @@ fun Home (modifier: Modifier = Modifier, navController: NavController, authViewM
     crealetra()
 }
 
+
+/****************************** hablar y escribir****************************************/
 @Composable
 fun SpeechRecognitionApp() {
     val context = LocalContext.current
@@ -211,9 +213,10 @@ fun DefaultPreview() {
 
 
 
+
+
+
 /* FUNCION CREAR LETRA*/
-
-
 @Composable
 fun crealetra(){
     var nombreLetra by remember { mutableStateOf("") }

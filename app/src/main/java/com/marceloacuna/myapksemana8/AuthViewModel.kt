@@ -56,7 +56,7 @@ class AuthViewModel : ViewModel() {
 
 
     //login
-    fun Registrar(nombreCompleto : String ,email : String, password : String, confirmarContraseña : String, fechaNacimiento : String, direccion : String){
+    fun Registrar(nombreCompleto : String ,email : String, password : String){
 
        /* if(nombreCompleto.isEmpty())
         {
@@ -73,16 +73,12 @@ class AuthViewModel : ViewModel() {
             _authState.value = AuthState.Error("password invalida")
             return
         }
-        else if(confirmarContraseña != password)
-        {
-            _authState.value = AuthState.Error("password no coinciden")
-            return
-        }
+    /*
         /*else if(fechaNacimiento.isEmpty())
         {
             _authState.value = AuthState.Error("Fecha de Nacimiento invalida")
             return
-        }
+        }*/
         else if(direccion.isEmpty())
         {
             _authState.value = AuthState.Error("Direccion invalida")

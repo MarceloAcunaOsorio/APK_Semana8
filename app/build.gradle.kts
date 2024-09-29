@@ -3,8 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
-
-
+    id("com.google.firebase.testlab")
 }
 
 android {
@@ -107,4 +106,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation ("com.google.firebase:firebase-database-ktx")
     implementation ("com.google.firebase:firebase-analytics-ktx")
+
+    //dependencias de JUnit
+    testImplementation ("junit:junit:4.13.2")
 }

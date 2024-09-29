@@ -122,7 +122,7 @@ fun Registrar(modifier: Modifier = Modifier,navController: NavController,authVie
         Spacer(modifier = Modifier.height(16.dp))
 
         //boton Registrar
-        Button(onClick = {authViewModel.Registrar(nombrecompleto,email,password,confirmarpassword,fechanacimiento,direccion)},
+        Button(onClick = {authViewModel.Registrar(email,password,confirmarpassword)},
             enabled = authState.value != AuthState.Loading)
         {
             Text(text="Registrarse",modifier = Modifier.height(20.dp).width(100.dp),textAlign = TextAlign.Center)

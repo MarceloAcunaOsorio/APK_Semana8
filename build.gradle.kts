@@ -3,4 +3,5 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.jetbrains.kotlin.android) apply false
     alias(libs.plugins.google.gms.google.services) apply false
+    id("com.google.firebase.testlab") version "0.0.1-alpha07" apply false
 }
