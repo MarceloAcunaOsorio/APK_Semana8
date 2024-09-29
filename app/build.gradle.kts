@@ -109,4 +109,9 @@ dependencies {
 
     //dependencias de JUnit
     testImplementation ("junit:junit:4.13.2")
+
+
+    //dependencias de Mockito
+    testImplementation("org.mockito:mockito-core:3.12.4")
+    testImplementation("org.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
 }

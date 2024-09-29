@@ -58,11 +58,6 @@ class AuthViewModel : ViewModel() {
     //login
     fun Registrar(nombreCompleto : String ,email : String, password : String){
 
-       /* if(nombreCompleto.isEmpty())
-        {
-            _authState.value = AuthState.Error("Nombre invalido")
-            return
-        }*/
         if(email.isEmpty())
         {
             _authState.value = AuthState.Error("Email invalido")
@@ -73,17 +68,6 @@ class AuthViewModel : ViewModel() {
             _authState.value = AuthState.Error("password invalida")
             return
         }
-    /*
-        /*else if(fechaNacimiento.isEmpty())
-        {
-            _authState.value = AuthState.Error("Fecha de Nacimiento invalida")
-            return
-        }*/
-        else if(direccion.isEmpty())
-        {
-            _authState.value = AuthState.Error("Direccion invalida")
-            return
-        }*/
 
         _authState.value = AuthState.Loading
         auth.createUserWithEmailAndPassword(email,password)
