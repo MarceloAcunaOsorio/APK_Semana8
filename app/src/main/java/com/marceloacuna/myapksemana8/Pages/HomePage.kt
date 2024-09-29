@@ -25,8 +25,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
@@ -56,11 +59,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.marceloacuna.myapksemana8.AuthState
 import com.marceloacuna.myapksemana8.AuthViewModel
+import com.marceloacuna.myapksemana8.Model.Letras_Model
+import com.marceloacuna.myapksemana8.R
 import com.marceloacuna.myapksemana8.Routes
 
 
@@ -97,16 +110,18 @@ fun Home (modifier: Modifier = Modifier, navController: NavController, authViewM
                 expanded = showMenu,
                 onDismissRequest = {showMenu = false}
             ) {
-                DropdownMenuItem(text = { Text(text = "Crear Receta")}, onClick = {Toast.makeText(context,"Crear Receta",Toast.LENGTH_SHORT).show()})
+               // DropdownMenuItem(text = { Text(text = "Crear Letra")}, onClick = {Toast.makeText(context,"Crear Letra",Toast.LENGTH_SHORT).show()})
 
                 DropdownMenuItem(text = { Text(text = "Cerrar Sesión")}, onClick = {authViewModel.cerrarSesion()})
             }
         }
     )
     SpeechRecognitionApp()
+
+    Spacer(modifier = Modifier.height(50.dp))
+
+    crealetra()
 }
-
-
 
 @Composable
 fun SpeechRecognitionApp() {
@@ -189,6 +204,138 @@ fun SpeechRecognitionApp() {
 fun DefaultPreview() {
     SpeechRecognitionApp()
 }
+
+
+
+
+/* FUNCION CREAR LETRA*/
+
+
+@Composable
+fun crealetra(){
+    var nombreLetra by remember { mutableStateOf("") }
+    var descripcion by remember { mutableStateOf("") }
+    var imagen by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf("") }
+    var context = LocalContext.current
+
+
+
+
+    Column(modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally)
+
+    {
+
+        Spacer(modifier = Modifier.height(50.dp))
+
+
+        //texto de pantalla Crear y su estilo
+        androidx.compose.material3.Text(text = "Letra", fontSize = 28.sp,fontWeight = FontWeight.Bold)
+        //salto de linea
+        Spacer(modifier = Modifier.height(6.dp))
+
+        OutlinedTextField(
+            value = nombreLetra,
+            onValueChange = { nombreLetra = it },
+            label = { androidx.compose.material.Text("Nombre Letra") },
+            modifier = Modifier.size(width = 380.dp, height = 60.dp),
+            shape = RoundedCornerShape(40)
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        OutlinedTextField(
+            value = descripcion,
+            onValueChange = { descripcion = it },
+            label = { androidx.compose.material.Text("Descripcion Letra") },
+            modifier = Modifier.size(width = 380.dp, height = 60.dp),
+            shape = RoundedCornerShape(40)
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        OutlinedTextField(
+            value = imagen,
+            onValueChange = { imagen = it },
+            label = { androidx.compose.material.Text("Imagen") },
+            modifier = Modifier.size(width = 380.dp, height = 60.dp),
+            shape = RoundedCornerShape(40)
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Button(onClick = {
+
+            when {
+                nombreLetra == "" -> errorMessage = "Nombre no debe quedar vacio"
+                descripcion == "" -> errorMessage = "Email no debe quedar vacio"
+                imagen == "" -> errorMessage = "Password no debe quedar vacio"
+
+                else -> {
+                    val database = FirebaseDatabase.getInstance()
+                    val ref = database.getReference("model_abecedario")
+
+                    val model_abecedario = Letras_Model(
+                        nombre = nombreLetra,
+                        descripcion = descripcion,
+                        imgen = imagen
+                    )
+                    ref.push().setValue(model_abecedario).addOnCompleteListener{task ->
+                        if(task.isSuccessful)
+                        {
+                            Toast.makeText(context, "Letra creada", Toast.LENGTH_SHORT).show()
+                        }
+                        else
+                        {
+                            Toast.makeText(context, "Error al crear letra", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                }
+            }
+        },shape = RoundedCornerShape(16.dp),
+            modifier = Modifier.size(width = 280.dp, height = 40.dp)
+        ) {
+            androidx.compose.material.Text(
+                "Crear",
+                style = TextStyle(
+                    fontSize = 20.sp, // Tamaño de fuente
+                    fontWeight = FontWeight.Bold // Peso de la fuente //
+                )
+            )
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        if (errorMessage.isNotEmpty()) {
+            androidx.compose.material.Text(text = errorMessage, color = Color.Red)
+        }
+    }
+}
+
+
+/*obtener listado*/
+private lateinit var database : DatabaseReference
+private fun obtenerlistadoletras(letra: String){
+    database = FirebaseDatabase.getInstance().getReference("model_abecedario")
+    val letraRef = database.child(letra)
+
+    letraRef.addListenerForSingleValueEvent(object: ValueEventListener{
+        override fun onDataChange(snapshot: DataSnapshot) {
+            if(snapshot.exists()) {
+               val letraListadoIndo = snapshot.getValue(:class.java)
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            TODO("Not yet implemented")
+        }
+    })
+}
+
+
 
 
 
